@@ -1,6 +1,6 @@
 library(randomForest)
 data(LetterRecognition, package = "mlbench")
-set.seed(seed = 123)
+set.seed(seed = 123, "L'Ecuyer-CMRG")
 
 n = nrow(LetterRecognition)
 n_test = floor(0.2 * n)
@@ -24,9 +24,13 @@ fold_err = function(i, cv_pars, folds, train) {
 }
 
 nc = as.numeric(commandArgs(TRUE)[1])
-fold_err = parallel::mclapply(1:nrow(cv_pars), fold_err, cv_pars, folds = folds, train = train, mc.cores = nc) 
+cat("Running with", nc, "cores\n")
+system.time({
+fold_err = parallel::mclapply(1:nrow(cv_pars), fold_err, cv_pars, folds = folds,
+                              train = train, mc.cores = nc) 
 err = tapply(unlist(fold_err), cv_pars[, "mtry"], sum)
-plot(mtry_val, err)
+})
+png(paste0("rf_cv_mc", nc, ".png")); plot(mtry_val, err/(n - n_test)); dev.off()
 
 rf.all = randomForest(lettr ~ ., train, ntree = ntree)
 pred = predict(rf.all, test)

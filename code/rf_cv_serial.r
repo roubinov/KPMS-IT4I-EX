@@ -23,9 +23,12 @@ fold_err = function(i, cv_pars, folds, train) {
   sum(pred != train$lettr[fold])
 }
 
+cat("Running serial\n")
+system.time({
 fold_err = lapply(1:nrow(cv_pars), fold_err, cv_pars, folds = folds, train = train)
 err = tapply(unlist(fold_err), cv_pars[, "mtry"], sum)
-plot(mtry_val, err/(n - n_test))
+})
+png(paste0("rf_cv_mc0.png")); plot(mtry_val, err/(n - n_test)); dev.off()
 
 rf.all = randomForest(lettr ~ ., train, ntree = ntree)
 pred = predict(rf.all, test)
@@ -37,4 +40,3 @@ pred_cv = predict(rf.all, test)
 correct_cv = sum(pred_cv == test$lettr)
 cat("Proportion Correct: ", correct/n_test, "(mtry = ", floor((ncol(test) - 1)/3),
     ") with cv:", correct_cv/n_test, "(mtry = ", mtry, ")\n", sep = "")
-
