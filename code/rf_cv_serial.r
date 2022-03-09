@@ -25,16 +25,16 @@ fold_err = function(i, cv_pars, folds, train) {
 
 cat("Running serial\n")
 system.time({
-fold_err = lapply(1:nrow(cv_pars), fold_err, cv_pars, folds = folds, train = train)
-err = tapply(unlist(fold_err), cv_pars[, "mtry"], sum)
+cv_err = lapply(1:nrow(cv_pars), fold_err, cv_pars, folds = folds, train = train)
+cv_err = tapply(unlist(cv_err), cv_pars[, "mtry"], sum)
 })
-png(paste0("rf_cv_mc0.png")); plot(mtry_val, err/(n - n_test)); dev.off()
+png(paste0("rf_cv_mc0.png")); plot(mtry_val, cv_err/(n - n_test)); dev.off()
 
 rf.all = randomForest(lettr ~ ., train, ntree = ntree)
 pred = predict(rf.all, test)
 correct = sum(pred == test$lettr)
 
-mtry = mtry_val[which.min(err)]
+mtry = mtry_val[which.min(cv_err)]
 rf.all = randomForest(lettr ~ ., train, ntree = ntree, mtry = mtry)
 pred_cv = predict(rf.all, test)
 correct_cv = sum(pred_cv == test$lettr)

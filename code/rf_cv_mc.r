@@ -26,9 +26,9 @@ fold_err = function(i, cv_pars, folds, train) {
 nc = as.numeric(commandArgs(TRUE)[1])
 cat("Running with", nc, "cores\n")
 system.time({
-fold_err = parallel::mclapply(1:nrow(cv_pars), fold_err, cv_pars, folds = folds,
+cv_err = parallel::mclapply(1:nrow(cv_pars), fold_err, cv_pars, folds = folds,
                               train = train, mc.cores = nc) 
-err = tapply(unlist(fold_err), cv_pars[, "mtry"], sum)
+err = tapply(unlist(cv_err), cv_pars[, "mtry"], sum)
 })
 png(paste0("rf_cv_mc", nc, ".png")); plot(mtry_val, err/(n - n_test)); dev.off()
 
