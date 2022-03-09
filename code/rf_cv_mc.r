@@ -30,7 +30,7 @@ cv_err = parallel::mclapply(1:nrow(cv_pars), fold_err, cv_pars, folds = folds,
                               train = train, mc.cores = nc) 
 err = tapply(unlist(cv_err), cv_pars[, "mtry"], sum)
 })
-png(paste0("rf_cv_mc", nc, ".png")); plot(mtry_val, err/(n - n_test)); dev.off()
+pdf(paste0("rf_cv_mc", nc, ".pdf")); plot(mtry_val, err/(n - n_test)); dev.off()
 
 rf.all = randomForest(lettr ~ ., train, ntree = ntree)
 pred = predict(rf.all, test)

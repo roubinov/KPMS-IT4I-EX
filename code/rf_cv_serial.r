@@ -28,7 +28,7 @@ system.time({
 cv_err = lapply(1:nrow(cv_pars), fold_err, cv_pars, folds = folds, train = train)
 cv_err = tapply(unlist(cv_err), cv_pars[, "mtry"], sum)
 })
-png(paste0("rf_cv_mc0.png")); plot(mtry_val, cv_err/(n - n_test)); dev.off()
+pdf(paste0("rf_cv_mc0.pdf")); plot(mtry_val, cv_err/(n - n_test)); dev.off()
 
 rf.all = randomForest(lettr ~ ., train, ntree = ntree)
 pred = predict(rf.all, test)
