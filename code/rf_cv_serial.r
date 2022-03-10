@@ -1,6 +1,8 @@
 library(randomForest)
 data(LetterRecognition, package = "mlbench")
 set.seed(seed = 123)
+#something
+
 
 n = nrow(LetterRecognition)
 n_test = floor(0.2 * n)
