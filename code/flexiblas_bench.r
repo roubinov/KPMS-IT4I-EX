@@ -1,56 +1,76 @@
 source("flexiblas_setup.r")
 
-x = matrix(rnorm(1e7), nrow = 1e4)
+x = matrix(rnorm(1e7), nrow = 1e4, ncol = 1e3)
+memuse::howbig(1e4, 1e3)
 beta = rep(1, ncol(x))
 err = rnorm(nrow(x))
 y = x %*% beta + err
 data = as.data.frame(cbind(y, x))
 names(data) = c("y", paste0("x", 1:ncol(x)))
 
-## lm --------------------------------------
+elo = 0
+ehi = 7
+
+# lm --------------------------------------
 setback("NETLIB", "lm")
-system.time((lm.yx = lm(y ~ ., data)))
+system.time((lm(y ~ ., data)))
 
 setback("OPENBLAS", "lm")
-for(i in 0:3) {
+for(i in elo:ehi) {
   setthreads(2^i, "lm")
-  print(system.time((lm.yx = lm(y ~ ., data))))
+  print(system.time((lm(y ~ ., data))))
 }
 
-## qr --------------------------------------
+# qr --------------------------------------
 setback("NETLIB", "qr")
-system.time((qr.x = qr(x)))
+system.time((qr(x)))
 
 setback("OPENBLAS")
 for(i in 0:3) {
   setthreads(2^i, "qr")
-  print(system.time((qr.x = qr(x))))
+  print(system.time((qr(x))))
 }
-for(i in 0:7) {
-  setthreads(2^i, "qr", LAPACK = TRUE)
-  print(system.time((qr.x = qr(x))))
-}
-for(i in 0:7) {
-  setthreads(2^i, "lm")
-  print(system.time((lm.yx = lm(y ~ ., data, LAPACK = TRUE))))
+for(i in elo:ehi) {
+  setthreads(2^i, "qr")
+  print(system.time((qr(x, LAPACK = TRUE))))
 }
 
-## prcomp --------------------------------------
+# prcomp --------------------------------------
 setback("NETLIB", "prcomp")
-system.time((prc.x = prcomp(x)))
+system.time((prcomp(x)))
 
 setback("OPENBLAS")
-for(i in 0:7) {
+for(i in elo:ehi) {
   setthreads(2^i, "prcomp")
-  print(system.time((prc.x = prcomp(x))))
+  print(system.time((prcomp(x))))
 }
 
-## princomp --------------------------------------
+# princomp --------------------------------------
 setback("NETLIB", "prcomp")
-system.time((prc.x = prcomp(x)))
+system.time((prcomp(x)))
 
 setback("OPENBLAS")
-for(i in 0:7) {
+for(i in elo:ehi) {
   setthreads(2^i, "princomp")
-  print(system.time((prc.x = princomp(x))))
+  print(system.time((princomp(x))))
+}
+
+# crossprod --------------------------------------
+setback("NETLIB", "crossprod")
+system.time((crossprod(x)))
+
+setback("OPENBLAS")
+for(i in elo:ehi) {
+  setthreads(2^i, "crossprod")
+  print(system.time((crossprod(x))))
+}
+
+# %*% --------------------------------------------
+setback("NETLIB", "%*%")
+system.time((t(x) %*% x))
+
+setback("OPENBLAS")
+for(i in elo:ehi) {
+  setthreads(2^i, "%*%")
+  print(system.time((t(x) %*% x)))
 }

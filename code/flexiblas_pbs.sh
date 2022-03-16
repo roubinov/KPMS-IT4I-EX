@@ -1,6 +1,6 @@
 #!/bin/bash
 #PBS -N fx
-#PBS -l select=1:ncpus=128,walltime=00:20:00
+#PBS -l select=1:ncpus=128,walltime=00:50:00
 #PBS -q qexp
 #PBS -e fx.e
 #PBS -o fx.o

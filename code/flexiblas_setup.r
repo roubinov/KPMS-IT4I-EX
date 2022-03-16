@@ -1,5 +1,6 @@
 library(flexiblas)
 flexiblas_avail()
+flexiblas_version()
 flexiblas_current_backend()
 flexiblas_list()
 flexiblas_list_loaded()
