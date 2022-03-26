@@ -1,0 +1,17 @@
+---
+title: "Exercise 6 (there is no 5)"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Show how to use the SVD to solve the least squares problem posed on page 11 in Lecture 6.
+
+## Plot a few digit images from the MNIST data
+
+The directory `mnist` has `mnist_read.R` file that reads the MNIST data.
+
+Plot a few digits from the data set, possibly using the `image()` function, or something from the `ggplot2` package
+
