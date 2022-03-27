@@ -18,4 +18,4 @@ dim(test) = c(28*28, 10000)
 test = as.data.frame(t(test))
 test_lab = factor(as.character(h5ts$label))
 
-image(test)
+image(z=test)
