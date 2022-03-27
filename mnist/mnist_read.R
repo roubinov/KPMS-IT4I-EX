@@ -17,5 +17,7 @@ test = as.double(h5ts$image)
 dim(test) = c(28*28, 10000)
 test = as.data.frame(t(test))
 test_lab = factor(as.character(h5ts$label))
+plot_test = as.matrix(test[1,],nrow = 28)
+plot_test
 
-image(z=data.matrix(test))
+image(z=plot_test)
