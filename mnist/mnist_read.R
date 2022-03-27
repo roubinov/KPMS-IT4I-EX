@@ -21,5 +21,6 @@ plot_test = matrix(test[1,],nrow = 28, ncol = 28)
 plot_test
 dim(plot_test)
 class(plot_test)
+class(plot_test[1,1])
 
-image(z=plot_test)
+image(z=plot_test, useRaster=TRUE)
