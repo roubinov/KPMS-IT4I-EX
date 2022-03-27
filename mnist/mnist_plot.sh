@@ -12,4 +12,4 @@ module load R
 echo "loaded R"
 
 
-Rscript mnist_rf.R --args 128
+Rscript mnist_read.R --args 128
