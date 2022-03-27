@@ -23,4 +23,4 @@ dim(plot_test)
 class(plot_test)
 class(plot_test[1,1])
 
-image(z=plot_test, useRaster=TRUE)
+image(z=plot_test, useRaster=TRUE, ylim=c(1,0))
