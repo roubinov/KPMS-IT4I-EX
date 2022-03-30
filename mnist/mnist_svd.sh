@@ -1,9 +1,9 @@
 #!/bin/bash
-#PBS -N mnist_rf
+#PBS -N mnist_svd
 #PBS -l select=1:ncpus=128,walltime=00:50:00
 #PBS -q qexp
-#PBS -e mnist_rf.e
-#PBS -o mnist_rf.o
+#PBS -e mnist_svd.e
+#PBS -o mnist_svd.o
 
 cd ~/KPMS-IT4I-EX/mnist
 pwd
@@ -11,7 +11,6 @@ pwd
 module load R
 echo "loaded R"
 
-# Best combination for Karolina
-time Rscript mnist_rf.R --args 64  8
+time Rscript mnist_svd.R
 
 

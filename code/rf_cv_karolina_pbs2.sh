@@ -1,9 +1,9 @@
 #!/bin/bash
-#PBS -N fx
+#PBS -N rf
 #PBS -l select=1:ncpus=128,walltime=00:50:00
 #PBS -q qexp
-#PBS -e fx.e
-#PBS -o fx.o
+#PBS -e rf_cv2.e
+#PBS -o rf_cv2.o
 
 cd ~/KPMS-IT4I-EX/code
 pwd
@@ -11,5 +11,4 @@ pwd
 module load R
 echo "loaded R"
 
-time Rscript flexiblas_bench2.r
-
+time Rscript rf_cv_mc2.r --args 64

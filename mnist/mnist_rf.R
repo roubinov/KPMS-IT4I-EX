@@ -1,22 +1,5 @@
-dir = "/scratch/project/dd-21-42/data/mnist/"
-## Data from:
-## https://www.kaggle.com/benedictwilkinsai/mnist-hd5f0
-## There is also a csv version
-## https://www.kaggle.com/oddrationale/mnist-in-csv
-## Requires kaggle log on
-## 
-library(rhdf5)
-h5tr = H5Fopen(paste0(dir, "train.hdf5"))
-train = as.double(h5tr$image)
-dim(train) = c(28*28, 60000)
-train = as.data.frame(t(train))
-label = factor(as.character(h5tr$label))
 
-h5ts = H5Fopen(paste0(dir, "test.hdf5"))
-test = as.double(h5ts$image)
-dim(test) = c(28*28, 10000)
-test = as.data.frame(t(test))
-label = factor(as.character(h5ts$label))
+source("mnist_read.R")
 
 library(parallel)
 library(randomForest)
@@ -25,17 +8,24 @@ set.seed(seed = 123, "L'Ecuyer-CMRG")
 n = nrow(train)
 n_test = nrow(test)
 
-nc = as.numeric(commandArgs(TRUE)[2])
-ntree = lapply(splitIndices(512, nc), length)
-rf = function(x, train, label) randomForest(train, y = label, ntree=x, nodesize = 200,
-                              norm.votes = FALSE)
-rf.out = mclapply(ntree, rf, train = train, label = label, mc.cores = nc)
-rf.all = do.call(combine, rf.out)
+ncb = as.numeric(commandArgs(TRUE)[2])
+cat("Build time (", ncb, "): \n")
+system.time({
+  ntree = lapply(splitIndices(512, ncb), length)
+  rf = function(x, train, lab) 
+    randomForest(train, y = lab, ntree=x, nodesize = 200, norm.votes = FALSE)
+  rf.out = mclapply(ntree, rf, train = train, lab = train_lab, mc.cores = ncb)
+  rf.all = do.call(combine, rf.out)
+})
 
-crows = splitIndices(nrow(test), nc) 
-rfp = function(x) as.vector(predict(rf.all, test[x, ])) 
-cpred = mclapply(crows, rfp, test = test, mc.cores = nc) 
-pred = do.call(c, cpred) 
+nct = as.numeric(commandArgs(TRUE)[3])
+cat("Predict time (", nct, "): \n")
+system.time({
+  crows = splitIndices(nrow(test), nct) 
+  rfp = function(x, rf.all, test) as.vector(predict(rf.all, test[x, ])) 
+  cpred = mclapply(crows, rfp, rf.all = rf.all, test = test, mc.cores = nct) 
+  pred = do.call(c, cpred) 
+})
 
-correct <- sum(pred == test$lettr)
+correct <- sum(pred == test_lab)
 cat("Proportion Correct:", correct/(n_test), "\n")

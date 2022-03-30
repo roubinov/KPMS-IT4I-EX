@@ -26,18 +26,32 @@ fold_err = function(i, cv_pars, folds, train) {
 nc = as.numeric(commandArgs(TRUE)[2])
 cat("Running with", nc, "cores\n")
 system.time({
-cv_err = parallel::mclapply(1:nrow(cv_pars), fold_err, cv_pars, folds = folds,
-                              train = train, mc.cores = nc) 
-err = tapply(unlist(cv_err), cv_pars[, "mtry"], sum)
+  cv_err = parallel::mclapply(1:nrow(cv_pars), fold_err, cv_pars, folds = folds,
+                              train = train, mc.cores = 128) 
+  err = tapply(unlist(cv_err), cv_pars[, "mtry"], sum)
 })
 pdf(paste0("rf_cv_mc", nc, ".pdf")); plot(mtry_val, err/(n - n_test)); dev.off()
 
-rf.all = randomForest(lettr ~ ., train, ntree = ntree)
+# start
+lntree = lapply(parallel::splitIndices(ntree, nc), length)
+rf = function(x) randomForest(lettr ~ ., train, ntree=unlist(x), norm.votes = FALSE)
+rf.out = parallel::mclapply(lntree, rf, mc.cores = 32)
+rf.all = do.call(combine, rf.out)
+#
+#rf.all = randomForest(lettr ~ ., train, ntree = ntree)
+# end
 pred = predict(rf.all, test)
 correct = sum(pred == test$lettr)
 
 mtry = mtry_val[which.min(err)]
-rf.all = randomForest(lettr ~ ., train, ntree = ntree, mtry = mtry)
+# start (some from above omitted)
+rf = function(x) randomForest(lettr ~ ., train, ntree=unlist(x), mtry = mtry,
+                              norm.votes = FALSE)
+rf.out = parallel::mclapply(lntree, rf, mc.cores = 32)
+rf.all = do.call(combine, rf.out)
+#
+#rf.all = randomForest(lettr ~ ., train, ntree = ntree, mtry = mtry)
+# end
 pred_cv = predict(rf.all, test)
 correct_cv = sum(pred_cv == test$lettr)
 cat("Proportion Correct: ", correct/n_test, "(mtry = ", floor((ncol(test) - 1)/3),
