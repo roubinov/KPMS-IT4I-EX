@@ -30,3 +30,6 @@ Plot a few digits from the data set, possibly using the `image()` function, or s
 
 The mnist directory has functions `mnist_plot.R` and `mnist_ggplot.R` with a solution.
 
+NOTE: new version of `mnist_read.R` adds a flag to allow simultaneous access to the MNIST file. Previous version was assuming read-write access and that locks the file for everyone else while in use. The new version has read-only access.
+
+This is a file example of the need for locks with shared resources, like we talked about in shared memory.
