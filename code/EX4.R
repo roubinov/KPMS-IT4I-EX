@@ -45,6 +45,8 @@ correct = sum(pred == test$lettr)
 
 mtry = mtry_val[which.min(err)]
 # start (some from above omitted)
+nc = as.numeric(commandArgs(TRUE)[3])
+lntree = lapply(parallel::splitIndices(ntree, nc), length)
 rf = function(x) randomForest(lettr ~ ., train, ntree=unlist(x), mtry = mtry,
                               norm.votes = FALSE)
 rf.out = parallel::mclapply(lntree, rf, mc.cores = 32)

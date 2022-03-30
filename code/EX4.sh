@@ -11,4 +11,4 @@ pwd
 module load R
 echo "loaded R"
 
-time Rscript rf_cv_mc2.r --args 64
+time Rscript rf_cv_mc2.r --args 64 8
