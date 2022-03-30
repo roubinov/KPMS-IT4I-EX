@@ -7,7 +7,7 @@ dir = "/scratch/project/dd-21-42/data/mnist/"
 ## 
 library(rhdf5)
 ## read 60000 training images
-h5tr = H5Fopen(paste0(dir, "train.hdf5"))
+h5tr = H5Fopen(paste0(dir, "train.hdf5"), flags="H5F_ACC_RDONLY")
 train = as.double(h5tr$image)
 dim(train) = c(28*28, 60000)
 train = as.data.frame(t(train))  # Transpose needed: row major to col major
