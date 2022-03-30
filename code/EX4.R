@@ -23,7 +23,7 @@ fold_err = function(i, cv_pars, folds, train) {
   sum(pred != train$lettr[fold])
 }
 
-nc = as.numeric(commandArgs(TRUE)[2])
+nc = as.numeric(commandArgs(TRUE)[2])  ## cores for cv
 cat("Running with", nc, "cores\n")
 system.time({
   cv_err = parallel::mclapply(1:nrow(cv_pars), fold_err, cv_pars, folds = folds,
@@ -32,20 +32,20 @@ system.time({
 })
 pdf(paste0("rf_cv_mc", nc, ".pdf")); plot(mtry_val, err/(n - n_test)); dev.off()
 
-# start
+# start mod1
+nc = as.numeric(commandArgs(TRUE)[3])  ## cores for single rf computation
 lntree = lapply(parallel::splitIndices(ntree, nc), length)
 rf = function(x) randomForest(lettr ~ ., train, ntree=unlist(x), norm.votes = FALSE)
 rf.out = parallel::mclapply(lntree, rf, mc.cores = 32)
 rf.all = do.call(combine, rf.out)
 #
 #rf.all = randomForest(lettr ~ ., train, ntree = ntree)
-# end
+# end mod1
 pred = predict(rf.all, test)
 correct = sum(pred == test$lettr)
 
 mtry = mtry_val[which.min(err)]
-# start (some from above omitted)
-nc = as.numeric(commandArgs(TRUE)[3])
+# start mod2
 lntree = lapply(parallel::splitIndices(ntree, nc), length)
 rf = function(x) randomForest(lettr ~ ., train, ntree=unlist(x), mtry = mtry,
                               norm.votes = FALSE)
@@ -53,7 +53,7 @@ rf.out = parallel::mclapply(lntree, rf, mc.cores = 32)
 rf.all = do.call(combine, rf.out)
 #
 #rf.all = randomForest(lettr ~ ., train, ntree = ntree, mtry = mtry)
-# end
+# end mod2
 pred_cv = predict(rf.all, test)
 correct_cv = sum(pred_cv == test$lettr)
 cat("Proportion Correct: ", correct/n_test, "(mtry = ", floor((ncol(test) - 1)/3),
