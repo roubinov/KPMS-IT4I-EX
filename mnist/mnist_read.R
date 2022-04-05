@@ -14,7 +14,7 @@ train = as.data.frame(t(train))  # Transpose needed: row major to col major
 train_lab = factor(as.character(h5tr$label))
 
 ## read 10000 testing images
-h5ts = H5Fopen(paste0(dir, "test.hdf5"))
+h5ts = H5Fopen(paste0(dir, "test.hdf5"), flags="H5F_ACC_RDONLY")
 test = as.double(h5ts$image)
 dim(test) = c(28*28, 10000)
 test = as.data.frame(t(test))
