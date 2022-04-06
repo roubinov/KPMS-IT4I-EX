@@ -13,5 +13,3 @@ echo "loaded R"
 
 # Best combination for Karolina
 time Rscript mnist_rf.R --args 64  8
-
-

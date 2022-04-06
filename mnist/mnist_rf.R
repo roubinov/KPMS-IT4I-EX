@@ -13,7 +13,7 @@ cat("Build time (", ncb, "): \n")
 system.time({
   ntree = lapply(splitIndices(512, ncb), length)
   rf = function(x, train, lab) 
-    randomForest(train, y = lab, ntree=x, nodesize = 200, norm.votes = FALSE)
+    randomForest(train, y = lab, ntree=x, norm.votes = FALSE)
   rf.out = mclapply(ntree, rf, train = train, lab = train_lab, mc.cores = ncb)
   rf.all = do.call(combine, rf.out)
 })
