@@ -1,21 +1,20 @@
-library(randomForest)
-library(pbdMPI)
-data(LetterRecognition, package = "mlbench")
-comm.set.seed(seed = 7654321, diff = FALSE)
+source("../mnist/mnist_read.R")
+suppressMessages(library(randomForest))
+suppressMessages(library(pbdIO))
+comm.set.seed(seed = 123, diff = TRUE)
 
-n = nrow(LetterRecognition)
-n_test = floor(0.5 * n)
-i_test = sample.int(n, n_test)
-train = LetterRecognition[-i_test, ]
-test = LetterRecognition[i_test, ][get.jid(n_test), ]
+n = nrow(train)
+n_test = nrow(test)
+my_trees = comm.chunk(512)
+my_test_rows = comm.chunk(nrow(test), form = "vector")
 
-comm.set.seed(seed = 1e6 * runif(1), diff = TRUE)
-my.rf = randomForest(lettr ~ ., train, ntree = 100 %/% comm.size(), norm.votes = FALSE)
-rf.all = allgather(my.rf)
-rf.all = do.call(combine, rf.all)
-pred = as.vector(predict(rf.all, test))
+my_rf = randomForest(train, y = train_lab, ntree = my_trees, norm.votes = FALSE)
+all_rf = allgather(my_rf)
+all_rf = do.call(combine, all_rf)
 
-sse = sum((pred - test$lettr)^2)
-comm.cat("MSE =", reduce(sse)/n_test, "\n")
+my_pred = as.vector(predict(all_rf, test[my_test_rows, ]))
+
+correct = reduce(sum(my_pred == test_lab[my_test_rows]))
+comm.cat("Proportion Correct:", correct/n_test, "\n")
 
 finalize()
