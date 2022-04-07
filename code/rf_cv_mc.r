@@ -8,6 +8,9 @@ i_test = sample.int(n, n_test)
 train = LetterRecognition[-i_test, ]
 test = LetterRecognition[i_test, ]
 
+print(train)
+print(test)
+
 ntree = 200
 nfolds = 10
 mtry_val = 1:(ncol(train) - 1)
