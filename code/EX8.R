@@ -1,5 +1,5 @@
 cat("Read and set up MNIST data:\n")
-system.time(source("mnist_read.R"))
+system.time(source("../mnist/mnist_read.R"))
 source("../code/flexiblas_setup.r")
 setback("OPENBLAS")
 
