@@ -1,9 +1,9 @@
 #!/bin/bash
-#PBS -N mnist_svd_mv
+#PBS -N EX8
 #PBS -l select=1:ncpus=128,walltime=00:50:00
 #PBS -q qexp
-#PBS -e mnist_svd_mv.e
-#PBS -o mnist_svd_mv.o
+#PBS -e ex8.e
+#PBS -o ex8.o
 
 cd ~/KPMS-IT4I-EX/code
 pwd
