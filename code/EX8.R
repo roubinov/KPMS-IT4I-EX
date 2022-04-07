@@ -118,7 +118,7 @@ fold_err = function(i, pct_pars, folds, train) {
 #  pred = predict(rf.all, train[fold, ])
   predicts = predict_svdmod(train[fold, ], models)
 #  sum(pred != train$lettr[fold])
-  pct_df[i,"correct"] = sum(predicts == test_lab[fold])
+  print(sum(predicts == test_lab[fold]))
   sum(predicts == test_lab[fold])
 }
 
@@ -130,4 +130,4 @@ system.time({
   err = tapply(unlist(pct_err), pct_pars[, "pct"], sum)
 })
 #pdf(paste0("rf_cv_mc", nc, ".pdf")); plot(mtry_val, err/(n - n_test)); dev.off()
-pct_df
+#pct_df
