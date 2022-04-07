@@ -98,7 +98,6 @@ setthreads(4)
 #correct <- sum(predicts == test_lab)
 #cat("Proportion Correct:", correct/nrow(test), "\n")
 
-print(train_lab)
 
 nfolds = 10
 #mtry_val = 1:(ncol(train) - 1)
@@ -115,9 +114,10 @@ fold_err = function(i, pct_pars, folds, train) {
  # rf.all = randomForest(lettr ~ ., train[!fold, ], ntree = ntree,
 #                      mtry = mtry, norm.votes = FALSE)
   models = svdmod(train[!fold, ], train_lab[!fold,], pct = pct)
-  
+  print(train_lab[fold,])
 #  pred = predict(rf.all, train[fold, ])
   predicts = predict_svdmod(train[fold, ], models)
+  print(predicts)
 #  sum(pred != train$lettr[fold])
   print(sum(predicts == test_lab[fold,]))
   sum(predicts == test_lab[fold])
