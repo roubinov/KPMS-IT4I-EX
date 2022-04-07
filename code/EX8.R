@@ -98,6 +98,7 @@ setthreads(4)
 #correct <- sum(predicts == test_lab)
 #cat("Proportion Correct:", correct/nrow(test), "\n")
 
+print(train_lab)
 
 nfolds = 10
 #mtry_val = 1:(ncol(train) - 1)
