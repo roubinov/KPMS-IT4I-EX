@@ -11,4 +11,4 @@ pwd
 module load R
 echo "loaded R"
 
-time Rscript EX8.R
+time Rscript EX8.R --args 2
