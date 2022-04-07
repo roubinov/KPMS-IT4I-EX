@@ -97,7 +97,7 @@ setthreads(4)
 
 #correct <- sum(predicts == test_lab)
 #cat("Proportion Correct:", correct/nrow(test), "\n")
-print(train_lab[1,])
+print(train_lab[1])
 print(train[1,])
 
 nfolds = 10
