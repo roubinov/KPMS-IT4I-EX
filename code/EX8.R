@@ -102,7 +102,7 @@ setthreads(4)
 nfolds = 10
 #mtry_val = 1:(ncol(train) - 1)
 #pct = seq(90, 99.9, 0.1)
-pct = seq(90, 99, 1)
+pct = seq(90, 99, 3)
 folds = sample( rep_len(1:nfolds, nrow(train)), nrow(train) )
 #cv_df = data.frame(mtry = mtry_val, incorrect = rep(0, length(mtry_val)))
 pct_df = data.frame(pct = pct, correct = rep(0, length(pct)))
@@ -113,12 +113,15 @@ fold_err = function(i, pct_pars, folds, train) {
   fold = (folds == pct_pars[i, "f"])
  # rf.all = randomForest(lettr ~ ., train[!fold, ], ntree = ntree,
 #                      mtry = mtry, norm.votes = FALSE)
-  models = svdmod(train[!fold, ], train_lab[!fold], pct = pct)
+  models = svdmod(train[!fold, ], train_lab[!fold,], pct = pct)
   
 #  pred = predict(rf.all, train[fold, ])
   predicts = predict_svdmod(train[fold, ], models)
 #  sum(pred != train$lettr[fold])
-  print(sum(predicts == test_lab[fold]))
+  test_lab[fold,]
+  test_lab[fold]
+  predicts
+  print(sum(predicts == test_lab[fold,]))
   sum(predicts == test_lab[fold])
 }
 
