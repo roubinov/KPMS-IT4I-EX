@@ -113,10 +113,10 @@ fold_err = function(i, pct_pars, folds, train) {
  # rf.all = randomForest(lettr ~ ., train[!fold, ], ntree = ntree,
 #                      mtry = mtry, norm.votes = FALSE)
   models = svdmod(train[!fold, ], train_lab[!fold], pct = pct)
-  print(class(train_lab[fold]))
+  print(dim(train_lab[fold]))
 #  pred = predict(rf.all, train[fold, ])
   predicts = predict_svdmod(train[fold, ], models)
-  print(class(predicts))
+  print(dim(predicts))
 #  sum(pred != train$lettr[fold])
   print(sum(predicts == test_lab[fold]))
   sum(predicts == test_lab[fold])
