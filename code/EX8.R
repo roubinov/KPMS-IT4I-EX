@@ -116,7 +116,7 @@ fold_err = function(i, pct_pars, folds, train) {
 #  pred = predict(rf.all, train[fold, ])
   predicts = predict_svdmod(train[fold, ], models)
 #  sum(pred != train$lettr[fold])
-  print(sum(is.na(predicts)))
+# print(sum(is.na(predicts)))
   print(sum(is.na(test_lab[fold])))
   print(sum(predicts[1:100] == test_lab[fold][1:100]))
   print(sum(predicts == test_lab[fold]))
