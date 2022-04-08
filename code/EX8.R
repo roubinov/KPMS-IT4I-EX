@@ -119,6 +119,7 @@ fold_err = function(i, pct_pars, folds, train) {
   print(predicts[2000])
 #  sum(pred != train$lettr[fold])
   print((predicts == test_lab[fold]))
+  print(sum(predicts[1:100] == test_lab[fold][1:100]))
   print(sum(predicts == test_lab[fold]))
   sum(predicts == test_lab[fold])
 }
