@@ -130,6 +130,7 @@ system.time({
                               train = train, mc.cores = nc) 
   err = tapply(unlist(pct_err), pct_pars[, "pct"], sum)
 })
-print(err/(n - n_test))
+print(err)
+print(err/(nrow(train)))
 #pdf(paste0("rf_cv_mc", nc, ".pdf")); plot(mtry_val, err/(n - n_test)); dev.off()
 #pct_df
