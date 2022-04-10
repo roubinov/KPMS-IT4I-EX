@@ -100,8 +100,8 @@ setthreads(4)
 
 nfolds = 10
 #mtry_val = 1:(ncol(train) - 1)
-#pct = seq(90, 99.9, 0.1)
-pct = seq(90, 99, 3)
+pct = seq(90, 99.9, 0.1)
+#pct = seq(90, 99, 3)
 folds = sample( rep_len(1:nfolds, nrow(train)), nrow(train) )
 #cv_df = data.frame(mtry = mtry_val, incorrect = rep(0, length(mtry_val)))
 pct_df = data.frame(pct = pct, correct = rep(0, length(pct)))
@@ -119,7 +119,7 @@ fold_err = function(i, pct_pars, folds, train) {
 # print(sum(is.na(predicts)))
 #  print(sum(is.na(train_lab[fold])))
 #  print(sum(predicts[1:100] == train_lab[fold][1:100]))
-  print(sum(predicts == train_lab[fold]))
+#  print(sum(predicts == train_lab[fold]))
   sum(predicts == train_lab[fold])
 }
 
@@ -130,7 +130,6 @@ system.time({
                               train = train, mc.cores = nc) 
   err = tapply(unlist(pct_err), pct_pars[, "pct"], sum)
 })
-print(err)
 print(err/(nrow(train)))
 #pdf(paste0("rf_cv_mc", nc, ".pdf")); plot(mtry_val, err/(n - n_test)); dev.off()
 #pct_df
