@@ -100,7 +100,8 @@ setthreads(4)
 
 nfolds = 10
 #mtry_val = 1:(ncol(train) - 1)
-pct = seq(90, 99.9, 0.3)
+#pct = seq(90, 99.9, 0.3)
+pct = seq(80, 99, 1)
 #pct = seq(90, 99, 3)
 folds = sample( rep_len(1:nfolds, nrow(train)), nrow(train) )
 #cv_df = data.frame(mtry = mtry_val, incorrect = rep(0, length(mtry_val)))
