@@ -1,7 +1,8 @@
 suppressMessages(library(pbdMPI))
 suppressMessages(library(parallel))
 
-host = system("hostname", intern = TRUE)
+## get node name
+host = unlist(strsplit(system("hostname", intern = TRUE), "[.]"))[1]
 
 mc.function = function(x) {
     ## Put code for mclapply cores here
