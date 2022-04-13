@@ -12,7 +12,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 The random forest code runs an error rate under 3% on the MNIST data (see updated `mnist/mnist_rf.R` and `mnist/mnist_rf.sh`). Can we optimize the SVD model to get close?
 
-The crossvalidation should be done on the `svdmod()` function call by dividing the *train* data into 10 random folds, training on 9 folds and predicting (with `predict_svdmod()`) the fold left out, just like we did in the `rf_cv_mc.r` code. Find the optimum among `pct = seq(90, 99.9, 0.1)` values. This gives 1000 independent computations for parallel treatment. 
+The crossvalidation should be done on the `svdmod()` function call by dividing the *train* data into 10 random folds, training on 9 folds and predicting (with `predict_svdmod()`) the fold left out, just like we did in the `rf_cv_mc.r` code. Find the optimum among `pct = seq(85, 95, 0.2)` values. This gives 1000 independent computations for parallel treatment. 
 
 I will have more direction later but at first, limit your MPI computation to 2 nodes. We will discuss more MPI concepts and examples in the March 6 Lecture 8.
 
