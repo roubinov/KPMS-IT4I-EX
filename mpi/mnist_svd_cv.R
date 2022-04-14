@@ -94,7 +94,7 @@ setthreads(4)
 library(parallel)
 library(ggplot2)
 
-## Begin CV
+## Begin CV (This CV is with mclapply. Exercise 8 needs MPI parallelization.)
 ## set up cv parameters
 nfolds = 10
 pars = seq(80.0, 95, 0.2)      ## par values to fit
