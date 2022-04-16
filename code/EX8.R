@@ -107,16 +107,16 @@ fold_err = function(i, pct_pars, folds, train) {
   sum(predicts == train_lab[fold])
 }
 
-nc = as.numeric(commandArgs(TRUE)[2])
+#nc = as.numeric(commandArgs(TRUE)[2])
+#cat("Running with", nc, "cores\n")
 
-cat("Running with", nc, "cores\n")
-dim(pct_pars)
-length(folds)
-comm.chunk(length(folds))
+index = comm.chunk(nrow(pct_pars), form = "vector")
 
-system.time({
-  pct_err = parallel::mclapply(1:nrow(pct_pars), fold_err, pct_pars, folds = folds,
-                              train = train, mc.cores = nc) 
-  err = tapply(unlist(pct_err), pct_pars[, "pct"], sum)
-})
-print(err/(nrow(train)))
+pct_err = lapply(index, fold_err, pct_pars, folds = folds, train = train) 
+err = tapply(unlist(pct_err), pct_pars[, "pct"], sum)
+
+all_err=reduce(err, op = "sum")
+  
+comm.print(all_err/(nrow(train)))
+
+finalize()
