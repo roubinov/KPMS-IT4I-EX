@@ -1,7 +1,7 @@
 cat("Read and set up MNIST data:\n")
-system.time(source("../mnist/mnist_read.R"))
+source("../mnist/mnist_read.R")
 source("../code/flexiblas_setup.r")
-setback("OPENBLAS")
+suppressMessages(setback("OPENBLAS"))
 suppressMessages(library(pbdIO))
 comm.set.seed(seed = 123, diff = TRUE)
 
@@ -92,7 +92,7 @@ model_report = function(models, kplot = 0) {
   }
 }
 
-setthreads(4)
+suppressMessages(setthreads(4))
 
 nfolds = 10
 pct = seq(83, 91, 0.2)
