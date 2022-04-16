@@ -113,9 +113,9 @@ fold_err = function(i, pct_pars, folds, train) {
 index = comm.chunk(nrow(pct_pars), form = "vector")
 
 pct_err = lapply(index, fold_err, pct_pars, folds = folds, train = train) 
-comm.print(pct_err)
+print(pct_err)
 #err = tapply(unlist(pct_err), pct_pars[, "pct"], sum)
-err = tapply(unlist(pct_err), sum)
+err = tapply(unlist(pct_err), pct_pars[index, "pct"], sum)
 
 
 all_err=reduce(err, op = "sum")
