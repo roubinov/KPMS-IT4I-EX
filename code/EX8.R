@@ -2,6 +2,9 @@ cat("Read and set up MNIST data:\n")
 system.time(source("../mnist/mnist_read.R"))
 source("../code/flexiblas_setup.r")
 setback("OPENBLAS")
+suppressMessages(library(pbdIO))
+comm.set.seed(seed = 123, diff = TRUE)
+
 
 #' svdmod
 #' 
@@ -91,46 +94,29 @@ model_report = function(models, kplot = 0) {
 
 setthreads(4)
 
-#models = svdmod(train, train_lab, pct = 95)
-#model_report(models, kplot = 9)
-#predicts = predict_svdmod(test, models)
-
-#correct <- sum(predicts == test_lab)
-#cat("Proportion Correct:", correct/nrow(test), "\n")
-
 nfolds = 10
-#mtry_val = 1:(ncol(train) - 1)
-#pct = seq(90, 99.9, 0.3)
 pct = seq(83, 91, 0.2)
-#pct = seq(90, 99, 3)
 folds = sample( rep_len(1:nfolds, nrow(train)), nrow(train) )
-#cv_df = data.frame(mtry = mtry_val, incorrect = rep(0, length(mtry_val)))
 pct_df = data.frame(pct = pct, correct = rep(0, length(pct)))
-#cv_pars = expand.grid(mtry = mtry_val, f = 1:nfolds)
 pct_pars = expand.grid(pct = pct, f = 1:nfolds)
 fold_err = function(i, pct_pars, folds, train) {
   pct = pct_pars[i, "pct"]
   fold = (folds == pct_pars[i, "f"])
- # rf.all = randomForest(lettr ~ ., train[!fold, ], ntree = ntree,
-#                      mtry = mtry, norm.votes = FALSE)
   models = svdmod(train[!fold, ], train_lab[!fold], pct = pct)
-#  pred = predict(rf.all, train[fold, ])
   predicts = predict_svdmod(train[fold, ], models)
-#  sum(pred != train$lettr[fold])
-# print(sum(is.na(predicts)))
-#  print(sum(is.na(train_lab[fold])))
-#  print(sum(predicts[1:100] == train_lab[fold][1:100]))
-#  print(sum(predicts == train_lab[fold]))
   sum(predicts == train_lab[fold])
 }
 
 nc = as.numeric(commandArgs(TRUE)[2])
+
 cat("Running with", nc, "cores\n")
+dim(pct_pars)
+length(folds)
+comm.chunk(length(folds))
+
 system.time({
   pct_err = parallel::mclapply(1:nrow(pct_pars), fold_err, pct_pars, folds = folds,
                               train = train, mc.cores = nc) 
   err = tapply(unlist(pct_err), pct_pars[, "pct"], sum)
 })
 print(err/(nrow(train)))
-#pdf(paste0("rf_cv_mc", nc, ".pdf")); plot(mtry_val, err/(n - n_test)); dev.off()
-#pct_df
