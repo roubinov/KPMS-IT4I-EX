@@ -119,7 +119,7 @@ pct_err = lapply(index, fold_err, pct_pars, folds = folds, train = train)
 #cat("err: ", err, ", rank: ", comm.rank())
 
 all_err=allgather(unlist(pct_err))
-cat("all_err: ", all_err, ", rank: ", comm.rank())
+cat("all_err: ", unlist(all_err), ", rank: ", comm.rank())
 
 all_err=do.call(combine, all_err)
 cat("all_err_final: ", all_err, ", rank: ", comm.rank())
