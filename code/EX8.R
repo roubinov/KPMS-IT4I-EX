@@ -121,8 +121,8 @@ pct_err = lapply(index, fold_err, pct_pars, folds = folds, train = train)
 all_err=allgather(unlist(pct_err))
 comm.cat("all_err: ", unlist(all_err), ", rank: ", comm.rank())
 
-all_err=do.call(combine, all_err)
-comm.cat("all_err_final: ", all_err, ", rank: ", comm.rank())
+all_err=gather(unlist(pct_err))
+comm.cat("all_err_gather: ", unlist(all_err), ", rank: ", comm.rank())
 
   
 comm.print(all_err/(nrow(train)))
