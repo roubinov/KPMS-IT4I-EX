@@ -9,11 +9,11 @@ getthreads = function() {
   flexiblas_get_num_threads()
 }
 setthreads = function(thr, label = "") {
-  cat(label, "Setting", thr, "threads\n")
+  # cat(label, "Setting", thr, "threads\n")
   flexiblas_set_num_threads(thr)
 }
 setback = function(backend, label = "") {
-  cat(label, "Setting", backend, "backend\n")
+  # cat(label, "Setting", backend, "backend\n")
   flexiblas_switch(flexiblas_load_backend(backend))
 }
 
