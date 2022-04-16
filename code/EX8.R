@@ -113,13 +113,17 @@ fold_err = function(i, pct_pars, folds, train) {
 index = comm.chunk(nrow(pct_pars), form = "vector")
 
 pct_err = lapply(index, fold_err, pct_pars, folds = folds, train = train) 
-print(pct_err)
+#print(pct_err)
 #err = tapply(unlist(pct_err), pct_pars[, "pct"], sum)
-err = tapply(unlist(pct_err), pct_pars[index, "pct"], sum)
-cat("err: ", err, ", rank: ", comm.rank())
+#err = tapply(unlist(pct_err), pct_pars[index, "pct"], sum)
+#cat("err: ", err, ", rank: ", comm.rank())
 
-all_err=gather(err)
-print(all_err)
+all_err=allgather(unlist(pct_err))
+cat("all_err: ", all_err, ", rank: ", comm.rank())
+
+all_err=do.call(combine, all_err)
+cat("all_err_final: ", all_err, ", rank: ", comm.rank())
+
   
 comm.print(all_err/(nrow(train)))
 
