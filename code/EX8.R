@@ -116,9 +116,10 @@ pct_err = lapply(index, fold_err, pct_pars, folds = folds, train = train)
 print(pct_err)
 #err = tapply(unlist(pct_err), pct_pars[, "pct"], sum)
 err = tapply(unlist(pct_err), pct_pars[index, "pct"], sum)
+print("err: ", err, ", rank: ", comm.rank())
 
-
-all_err=reduce(err, op = "sum")
+all_err=gather(err)
+print(all_err)
   
 comm.print(all_err/(nrow(train)))
 
