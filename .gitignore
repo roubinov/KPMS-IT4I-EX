@@ -5,3 +5,4 @@
 *.html
 */Rplots.pdf
 */.DS_Store
+.RDataTmp
