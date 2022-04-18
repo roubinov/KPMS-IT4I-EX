@@ -110,15 +110,9 @@ fold_err = function(i, pct_pars, folds, train) {
   sum(predicts == train_lab[fold])
 }
 
-#nc = as.numeric(commandArgs(TRUE)[2])
-#cat("Running with", nc, "cores\n")
-
 index = comm.chunk(nrow(pct_pars), form = "vector")
 
 pct_err = lapply(index, fold_err, pct_pars, folds = folds, train = train) 
-#print(pct_err)
-#err = tapply(unlist(pct_err), pct_pars[index, "pct"], sum)
-#cat("err: ", err, ", rank: ", comm.rank())
 
 all_err=allgather(unlist(pct_err))
 
