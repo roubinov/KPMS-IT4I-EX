@@ -2,12 +2,15 @@ library( pbdMPI, quiet = TRUE )
 
 comm.set.seed( seed = 1234567, diff = TRUE )
 
-n <- sample( 1:10, size = 1 )
+my_rank = comm.rank()
+n = sample( 1:10, size = my_rank + 1 )
+comm.print(n, all.rank = TRUE)
 
-gt <- gather( n )
-comm.print( unlist( gt ) )
+gt = gather(n)
 
-sm <- allreduce( n, op = 'sum' )
-comm.print( sm, all.rank = TRUE )
+obj_len = gather(length(n))
+comm.cat("gathered unequal size objects. lengths =", unlist(obj_len), "\n")
+
+comm.print( unlist( gt ), all.rank = TRUE )
 
 finalize()
