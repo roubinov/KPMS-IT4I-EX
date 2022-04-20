@@ -1,0 +1,19 @@
+---
+title: "Exercise 10"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Describe a computation from your experience or research that could use HPC resources
+
+1. Describe that data that you would use or generate  
+2. Sketch the serial methodology that would be applied.  
+3. Would this computation take a long time or a lot of memory? Even if it does not, it can be worthwhile to speed it up for experimentation.
+
+You can write the description in English or Czech. Work in your groups and send me a description when you are ready.
+
+During the next lectures, your group can take a few minutes to present this to the class via zoom. The class can discuss some ways to sketch this computation on a cluster. 
+
+I am hoping to get one or two such discussions each week. We may need to work out the logistics for in-classroom presentations.
